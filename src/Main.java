@@ -146,140 +146,163 @@ class CarRentalSystem {
     public void Menu() {
         Scanner scanner = new Scanner(System.in);
 
-        while (true) {
-            System.out.println("===== Car Rental System =====");
-            System.out.println("1. Rent a Car");
-            System.out.println("2. Return a Car");
-            System.out.println("3. View All Available cars");
-            System.out.println("4. Exit");
-            System.out.print("Enter your choice: ");
 
-            int choice = scanner.nextInt();
-            scanner.nextLine();
+            while (true) {
+                System.out.println("===== Car Rental System =====");
+                System.out.println("1. Rent a Car");
+                System.out.println("2. Return a Car");
+                System.out.println("3. View All Available cars");
+                System.out.println("4. Exit");
+                System.out.print("Enter your choice: ");
 
-            if (choice == 1) {
-
-                System.out.println("\n== Rent a Car ==\n");
-                System.out.print("Enter your name: ");
-                String customerName = scanner.nextLine();
-                System.out.println("\n Available Cars \n");
-
-                for (Car car : carsArray) {
-                    if (car.getisAvailable()) {
-                        System.out.println(car.getCarId() + " - " + car.getBrand() + " " + car.getModel() + " $"
-                                + car.getPrice() + "/day");
-                    }
-                }
-
-                Car selectedCar = null;
-                while (true) {
-                    System.out.print("\nEnter the car ID you want to rent: ");
-                    String carId = scanner.nextLine();
-                    for (Car car : carsArray) {
-                        if (car.getCarId().equals(carId)) {
-                            selectedCar = car;
-                            break;
-                        }
-                    }
-                    if (selectedCar != null) {
-                        break;
-                    } else {
-                        System.out.println("Invalid Car ID. Try again.");
-                    }
-                }
-
-                System.out.print("Enter the number of days for rental: ");
-                int rentalDays = scanner.nextInt();
+                int choice = 0;
+                try{
+                choice = scanner.nextInt();
                 scanner.nextLine();
-                // That's because the Scanner.nextInt method does not read the newline character
-                // in your input created by hitting "Enter," and so the call to Scanner.nextLine
-                // returns after reading that newline. so after no of rental days we should use
-                // scanner.nextLine() other wise it will skip the confirm user input
-
-                Customer newCustomer = new Customer(customerName, "CUS" + customersArray.size() + 1);
-
-                if (selectedCar != null) {
-                    double totalPrice = selectedCar.calculatePrice(rentalDays);
-                    System.out.println("\n== Rental Information ==\n");
-                    System.out.println("Customer ID: " + newCustomer.getCustomerId());
-                    System.out.println("Customer Name: " + newCustomer.getName());
-                    System.out.println("Car: " + selectedCar.getBrand() + " " + selectedCar.getModel());
-                    System.out.println("Rental Days: " + rentalDays);
-                    System.out.printf("Total Price: $%.2f%n", totalPrice);
-
-                    // System.out.print("\nConfirm rental (Y/N): ");
-                    // String confirm = scanner.nextLine();
-                    // System.out.println();
-
-                    System.out.print("\nConfirm rental (Y/N): ");
-                    String confirmRental = scanner.nextLine();
-
-                    if (confirmRental.equalsIgnoreCase("Y")) {
-                        rentCar(selectedCar, newCustomer, rentalDays);
-                        System.out.println("\nCar rented successfully\n");
-                    } else {
-                        System.out.println("\nRental canceled\n");
-                    }
-
+                }
+                catch(Exception e){
+                    scanner.nextLine();
                 }
 
-            } else if (choice == 2) {
-                while (true) {
-                    System.out.println("\n== Return a Car ==\n");
-                    System.out.print("\nEnter the name that you used while renting the car: ");
-                    String custName = scanner.nextLine();
-                    System.out.print("\nEnter the car ID you want to return: ");
-                    String carId = scanner.nextLine();
+                if (choice == 1) {
 
-                    Customer customer = null;
+                    System.out.println("\n== Rent a Car ==\n");
+                    System.out.print("Enter your name: ");
+                    String customerName = scanner.nextLine();
+                    System.out.println("\n Available Cars \n");
 
-                    for (Rental verifyCustomer : rentalsArray) {
-                        if (verifyCustomer.getCustomer().getName().equals(custName)) {
-                            customer = verifyCustomer.getCustomer();
-
-                            break;
+                    for (Car car : carsArray) {
+                        if (car.getisAvailable()) {
+                            System.out.println(car.getCarId() + " - " + car.getBrand() + " " + car.getModel() + " $"
+                                    + car.getPrice() + "/day");
                         }
                     }
 
                     Car selectedCar = null;
-                    if (customer != null) {
-                        for (Rental verifyCar : rentalsArray) {
-                            if (verifyCar.getCar().getCarId().equals(carId)) {
-                                selectedCar = verifyCar.getCar();
+                    while (true) {
+                        System.out.print("\nEnter the car ID you want to rent: ");
+                        String carId = scanner.nextLine();
+                        for (Car car : carsArray) {
+                            if (car.getCarId().equals(carId)) {
+                                selectedCar = car;
                                 break;
                             }
                         }
-                    }
-
-                    if (selectedCar != null && customer != null) {
-                        returnCar(selectedCar);
-                        System.out.println(customer.getName() + ", your car has been successfully returned\n");
-                        break;
-                    } else {
-                        System.out.println("\nInvalid name or car ID");
-                        System.out.print("\nPress 1 to try again or press 0 to go back to main menu: ");
-                        int repeat = scanner.nextInt();
-                        scanner.nextLine();
-                        if (repeat == 0) {
+                        if (selectedCar != null) {
                             break;
+                        } else {
+                            System.out.println("Invalid Car ID. Try again.");
+                        }
+                    }
+                    int rentalDays = 0;
+                    while (true) {
+                        Boolean flag = false;
+
+                        try {
+
+                            System.out.print("Enter the number of days for rental: ");
+                            rentalDays = scanner.nextInt();
+                            scanner.nextLine();
+                        } catch (Exception error) {
+                            System.out.println("\nInvalid Input. Please try again\n");
+                            flag = true;
+                            scanner.nextLine();
+                        }
+                        if (!flag) {
+                            break;
+                        }
+                    }
+                    // That's because the Scanner.nextInt method does not read the newline character
+                    // in your input created by hitting "Enter," and so the call to Scanner.nextLine
+                    // returns after reading that newline. so after no of rental days we should use
+                    // scanner.nextLine() other wise it will skip the confirm user input
+
+                    Customer newCustomer = new Customer(customerName, "CUS" + customersArray.size() + 1);
+
+                    if (selectedCar != null) {
+                        double totalPrice = selectedCar.calculatePrice(rentalDays);
+                        System.out.println("\n== Rental Information ==\n");
+                        System.out.println("Customer ID: " + newCustomer.getCustomerId());
+                        System.out.println("Customer Name: " + newCustomer.getName());
+                        System.out.println("Car: " + selectedCar.getBrand() + " " + selectedCar.getModel());
+                        System.out.println("Rental Days: " + rentalDays);
+                        System.out.printf("Total Price: $%.2f%n", totalPrice);
+
+                        // System.out.print("\nConfirm rental (Y/N): ");
+                        // String confirm = scanner.nextLine();
+                        // System.out.println();
+
+                        System.out.print("\nConfirm rental (Y/N): ");
+                        String confirmRental = scanner.nextLine();
+
+                        if (confirmRental.equalsIgnoreCase("Y")) {
+                            rentCar(selectedCar, newCustomer, rentalDays);
+                            System.out.println("\nCar rented successfully\n");
+                        } else {
+                            System.out.println("\nRental canceled\n");
                         }
 
                     }
+
+                } else if (choice == 2) {
+                    while (true) {
+                        System.out.println("\n== Return a Car ==\n");
+                        System.out.print("\nEnter the name that you used while renting the car: ");
+                        String custName = scanner.nextLine();
+                        System.out.print("\nEnter the car ID you want to return: ");
+                        String carId = scanner.nextLine();
+
+                        Customer customer = null;
+
+                        for (Rental verifyCustomer : rentalsArray) {
+                            if (verifyCustomer.getCustomer().getName().equals(custName)) {
+                                customer = verifyCustomer.getCustomer();
+
+                                break;
+                            }
+                        }
+
+                        Car selectedCar = null;
+                        if (customer != null) {
+                            for (Rental verifyCar : rentalsArray) {
+                                if (verifyCar.getCar().getCarId().equals(carId)) {
+                                    selectedCar = verifyCar.getCar();
+                                    break;
+                                }
+                            }
+                        }
+
+                        if (selectedCar != null && customer != null) {
+                            returnCar(selectedCar);
+                            System.out.println(customer.getName() + ", your car has been successfully returned\n");
+                            break;
+                        } else {
+                            System.out.println("\nInvalid name or car ID");
+                            System.out.print("\nPress 1 to try again or press 0 to go back to main menu: ");
+                            int repeat = scanner.nextInt();
+                            scanner.nextLine();
+                            if (repeat == 0) {
+                                break;
+                            }
+
+                        }
+                    }
+
+                } else if (choice == 3) {
+                    System.out.println("\nAvailable Vehicles\n");
+                    for (int i = 0; i < carsArray.size(); i++) {
+                        System.out.println(i + 1 + ". " + carsArray.get(i).getBrand() + " " + carsArray.get(i).getModel());
+                    }
+                    System.out.println();
+                } else if (choice == 4) {
+                    break;
+                } else {
+                    System.out.println("\nInvalid input. Please try again. \n");
                 }
 
-            } else if (choice == 3) {
-                System.out.println("\nAvailable Vehicles\n");
-                for (int i = 0; i < carsArray.size(); i++) {
-                    System.out.println(i + 1 + ". " + carsArray.get(i).getBrand() + " " + carsArray.get(i).getModel());
-                }
-                System.out.println();
-            } else if (choice == 4) {
-                break;
-            } else {
-                System.out.println("\nInvalid input. Please try again. \n");
             }
 
-        }
+
 
     }
 
