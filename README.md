@@ -1,5 +1,8 @@
 == Project Overview ==
 
+
+The provided Java code is a simple car rental system. It includes classes to represent cars, customers, and rental transactions. The system allows users to add cars and customers, rent and return cars, and view available cars. The main class initiates the system and provides a user-friendly menu for interactions, such as renting a car, returning a car, viewing available cars, and exiting the system. The code incorporates error handling for user inputs and includes comments for better understanding.
+
 Car Class
 
 The Car class represents a vehicle with attributes such as car ID, brand, model, base price per day, and availability.
